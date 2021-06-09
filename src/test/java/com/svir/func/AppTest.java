@@ -1,4 +1,5 @@
 package com.svir.func;
+import com.svir.func.ui.*;
 
 import static org.junit.Assert.assertTrue;
 
@@ -16,5 +17,11 @@ public class AppTest
     public void shouldAnswerWithTrue()
     {
         assertTrue( true );
+    }
+
+    @Test
+    public void showFunctionEditor()
+    {
+        FunctionEditor functionEditor = new FunctionEditor();
     }
 }
