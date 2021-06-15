@@ -5,17 +5,32 @@
  */
 package com.svir.func.ui;
 
+import java.awt.CardLayout;
+
+import com.svir.func.ui.FunctionEditorAlgebraic;
+import com.svir.func.ui.FunctionEditorPoints;
+
 /**
  *
  * @author sleeplynerd
  */
 public class FunctionEditor extends javax.swing.JFrame {
-
+    
+    private final String FUNCTION_DETAILS_CARD_ALGEBRAIC = "Algebraic";
+    private final String FUNCTION_DETAILS_CARD_POINTS = "Points";
     /**
      * Creates new form FunctionEditor
      */
     public FunctionEditor() {
         initComponents();
+        
+        functionTypeComboBox.removeAllItems();
+        functionTypeComboBox.addItem(FUNCTION_DETAILS_CARD_ALGEBRAIC);
+        functionTypeComboBox.addItem(FUNCTION_DETAILS_CARD_POINTS);
+        
+        functionDetailsPanelCards.setLayout(new CardLayout());
+        functionDetailsPanelCards.add(new FunctionEditorAlgebraic(), FUNCTION_DETAILS_CARD_ALGEBRAIC);
+        functionDetailsPanelCards.add(new FunctionEditorPoints(), FUNCTION_DETAILS_CARD_POINTS);
     }
 
     /**
@@ -29,10 +44,11 @@ public class FunctionEditor extends javax.swing.JFrame {
 
         rootSplit = new javax.swing.JSplitPane();
         leftSplit = new javax.swing.JSplitPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        functionsListScrollPane = new javax.swing.JScrollPane();
         fragmentList = new javax.swing.JList<>();
-        jPanel1 = new javax.swing.JPanel();
-        typeFunctionComboBox = new javax.swing.JComboBox<>();
+        functionDetailsPanel = new javax.swing.JPanel();
+        functionTypeComboBox = new javax.swing.JComboBox<>();
+        functionDetailsPanelCards = new javax.swing.JPanel();
         plotPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -44,26 +60,37 @@ public class FunctionEditor extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(fragmentList);
+        functionsListScrollPane.setViewportView(fragmentList);
 
-        leftSplit.setTopComponent(jScrollPane2);
+        leftSplit.setTopComponent(functionsListScrollPane);
 
-        typeFunctionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        functionDetailsPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(typeFunctionComboBox, 0, 120, Short.MAX_VALUE)
+        functionTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        functionTypeComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                functionTypeComboBoxItemStateChanged(evt);
+            }
+        });
+
+        functionDetailsPanelCards.setLayout(new java.awt.CardLayout());
+
+        javax.swing.GroupLayout functionDetailsPanelLayout = new javax.swing.GroupLayout(functionDetailsPanel);
+        functionDetailsPanel.setLayout(functionDetailsPanelLayout);
+        functionDetailsPanelLayout.setHorizontalGroup(
+            functionDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(functionTypeComboBox, 0, 120, Short.MAX_VALUE)
+            .addComponent(functionDetailsPanelCards, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(typeFunctionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 240, Short.MAX_VALUE))
+        functionDetailsPanelLayout.setVerticalGroup(
+            functionDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(functionDetailsPanelLayout.createSequentialGroup()
+                .addComponent(functionTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(functionDetailsPanelCards, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        leftSplit.setRightComponent(jPanel1);
+        leftSplit.setRightComponent(functionDetailsPanel);
 
         rootSplit.setLeftComponent(leftSplit);
 
@@ -84,11 +111,11 @@ public class FunctionEditor extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(rootSplit, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(rootSplit)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(rootSplit, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(rootSplit)
         );
 
         rootSplit.getAccessibleContext().setAccessibleName("");
@@ -96,6 +123,12 @@ public class FunctionEditor extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void functionTypeComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_functionTypeComboBoxItemStateChanged
+        // TODO add your handling code here:
+        CardLayout cl = (CardLayout)(functionDetailsPanelCards.getLayout());
+        cl.show(functionDetailsPanelCards, (String)evt.getItem());
+    }//GEN-LAST:event_functionTypeComboBoxItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -134,11 +167,12 @@ public class FunctionEditor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> fragmentList;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel functionDetailsPanel;
+    private javax.swing.JPanel functionDetailsPanelCards;
+    private javax.swing.JComboBox<String> functionTypeComboBox;
+    private javax.swing.JScrollPane functionsListScrollPane;
     private javax.swing.JSplitPane leftSplit;
     private javax.swing.JPanel plotPanel;
     private javax.swing.JSplitPane rootSplit;
-    private javax.swing.JComboBox<String> typeFunctionComboBox;
     // End of variables declaration//GEN-END:variables
 }

@@ -24,4 +24,10 @@ public class AppTest
     {
         FunctionEditor functionEditor = new FunctionEditor();
     }
+    
+    @Test
+    public void cardLayoutDemo()
+    {
+        
+    }
 }

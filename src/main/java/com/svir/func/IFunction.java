@@ -7,7 +7,7 @@ public interface IFunction {
     /**
      * Represents a bound of a mathematical interval abstraction: (VALUE, OPEN/CLOSED)
      */
-    static class Bound {
+    public static class Bound {
         private double val;
         private boolean open;
 
